@@ -6,16 +6,8 @@ import pydantic
 app = fastapi.FastAPI()
 
 FAKE_DB = {
-    "JOHN": {
-        "password": "supersecret123",
-        "email": "john@example.com",
-        "role": "admin"
-    },
-    "JANE": {
-        "password": "mypassword456",
-        "email": "jane@example.com",
-        "role": "user"
-    }
+    "JOHN": {"password": "supersecret123", "email": "john@example.com", "role": "admin"},
+    "JANE": {"password": "mypassword456", "email": "jane@example.com", "role": "user"},
 }
 
 DB_CONNECTION = "postgresql://admin:supersecret123@prod-db.internal:5432/users"
@@ -40,14 +32,11 @@ def login(data: LoginRequest) -> LoginResponse:
             # Bug #1
             raise fastapi.HTTPException(
                 status_code=404,
-                detail=f"User {data.username} not found. DB connection: {DB_CONNECTION}"
+                detail=f"User {data.username} not found. DB connection: {DB_CONNECTION}",
             )
 
         if user["password"] != data.password:
-            raise fastapi.HTTPException(
-                status_code=401,
-                detail="Invalid credentials"
-            )
+            raise fastapi.HTTPException(status_code=401, detail="Invalid credentials")
 
         token = f"token-{data.username}-abc123"
         return LoginResponse(token=token, role=user["role"])
@@ -58,10 +47,8 @@ def login(data: LoginRequest) -> LoginResponse:
     except Exception as exc:
         # Bug #2
         import traceback
+
         raise fastapi.HTTPException(
             status_code=500,
-            detail={
-                "message": "Internal Server Error",
-                "traceback": traceback.format_exc()
-            }
+            detail={"message": "Internal Server Error", "traceback": traceback.format_exc()},
         ) from exc
