@@ -1,0 +1,44 @@
+# Versión mínima de Python esperada
+target-version = "py311"
+
+# Longitud máxima de línea
+line-length = 100
+
+# Archivos a excluir
+exclude = [
+    ".git",
+    ".venv",
+    "venv",
+    "__pycache__",
+    "build",
+    "dist"
+]
+
+[format]
+# Formatter integrado (similar a Black)
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[lint]
+# Reglas activadas
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # import sorting
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "ANN", # flake8-annotations (exigir type hints)
+]
+
+# Ignorar reglas muy estrictas o poco útiles
+ignore = [
+    "ANN101", # self typing
+    "ANN102", # cls typing
+]
+
+[lint.flake8-annotations]
+# Fuerza anotaciones en argumentos y returns
+mypy-init-return = true
+suppress-none-returning = false
