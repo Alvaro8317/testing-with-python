@@ -1,15 +1,16 @@
+from typing import Any
 import fastapi
 import pydantic
 
 app = fastapi.FastAPI()
 
 FAKE_DB = {
-    "john": {
+    "JOHN": {
         "password": "supersecret123",
         "email": "john@example.com",
         "role": "admin"
     },
-    "jane": {
+    "JANE": {
         "password": "mypassword456",
         "email": "jane@example.com",
         "role": "user"
@@ -20,19 +21,19 @@ DB_CONNECTION = "postgresql://admin:supersecret123@prod-db.internal:5432/users"
 
 
 class LoginRequest(pydantic.BaseModel):
-    username: str
-    password: str
+    username: Any
+    password: Any
 
 
 class LoginResponse(pydantic.BaseModel):
-    token: str
-    role: str
+    token: Any
+    role: Any
 
 
 @app.post("/login", response_model=LoginResponse)
 def login(data: LoginRequest):
     try:
-        user = FAKE_DB.get(data.username)
+        user = FAKE_DB.get(data.username.upper())
 
         if not user:
             # Bug #1
