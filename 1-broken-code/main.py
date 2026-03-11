@@ -1,4 +1,5 @@
 from typing import Any
+
 import fastapi
 import pydantic
 
@@ -31,7 +32,7 @@ class LoginResponse(pydantic.BaseModel):
 
 
 @app.post("/login", response_model=LoginResponse)
-def login(data: LoginRequest):
+def login(data: LoginRequest) -> LoginResponse:
     try:
         user = FAKE_DB.get(data.username.upper())
 
@@ -54,7 +55,7 @@ def login(data: LoginRequest):
     except fastapi.HTTPException:
         raise
 
-    except Exception as e:
+    except Exception as exc:
         # Bug #2
         import traceback
         raise fastapi.HTTPException(
@@ -63,4 +64,4 @@ def login(data: LoginRequest):
                 "message": "Internal Server Error",
                 "traceback": traceback.format_exc()
             }
-        )
+        ) from exc
