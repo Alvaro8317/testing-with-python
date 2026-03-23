@@ -8,7 +8,7 @@ class CarShopping:
     def add(self, producto: str, precio: int | float | decimal.Decimal) -> None:
         self.items.append({"producto": producto, "precio": precio})
 
-    def total(self) -> int:
+    def total(self) -> int | float | decimal.Decimal:
         return sum(item["precio"] for item in self.items)
 
     def empty(self) -> None:
