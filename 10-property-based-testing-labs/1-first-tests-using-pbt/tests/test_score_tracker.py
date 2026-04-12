@@ -7,6 +7,9 @@ Escribe un test por cada comportamiento descrito en los comentarios.
 Importa lo que necesites desde src.score_tracker.
 """
 
+import hypothesis
+from hypothesis import strategies as st
+from src import score_tracker
 
 # ---------------------------------------------------------------------------
 # add_points
@@ -16,6 +19,23 @@ Importa lo que necesites desde src.score_tracker.
 # sumar puntos positivos incrementa el marcador correctamente
 # sumar puntos a un marcador de 0 retorna los puntos sumados
 # sumar puntos negativos lanza ValueError
+
+
+@hypothesis.given(current_score=st.integers(min_value=0, max_value=100), points_to_add=st.just(0))
+def test_add_points_add_zero_points_should_not_change_the_score_tracker(
+    current_score: int, points_to_add: int
+) -> None:
+    result = score_tracker.add_points(current_score=current_score, points=points_to_add)
+    assert result == current_score
+
+
+@hypothesis.given(
+    current_score=st.integers(min_value=0, max_value=100),
+    points_to_add=st.integers(min_value=1, max_value=10),
+)
+def test_add_points_should_update_the_current_score(current_score: int, points_to_add: int) -> None:
+    result = score_tracker.add_points(current_score=current_score, points=points_to_add)
+    assert result > current_score
 
 
 # ---------------------------------------------------------------------------
