@@ -1,0 +1,1 @@
+python3 -c "import hypothesis; print(hypothesis.__version__)"
