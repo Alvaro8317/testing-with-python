@@ -1,15 +1,19 @@
-class Configuracion:
-    modo_debug = True
-    max_intentos = 3
+class Configuration:
+    debug_mode = True
+    max_retries = 3
 
 
-class ProcesadorDePagos:
-    def procesar(self, monto: float) -> str:
-        if Configuracion.modo_debug:
+class PaymentProcessor:
+    def process(self, monto: float) -> str:
+        if Configuration.debug_mode:
             print(f"[DEBUG] Procesando ${monto}")
 
-        for _ in range(Configuracion.max_intentos):
+        for _ in range(Configuration.max_retries):
             if monto > 0:
                 return "aprobado"
 
         return "rechazado"
+
+
+# Configuration.debug_mode = False
+# Configuration.max_retries = 0

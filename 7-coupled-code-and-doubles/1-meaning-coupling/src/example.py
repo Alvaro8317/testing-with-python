@@ -1,20 +1,19 @@
-class Clase1:
+class Class1:
     x = True
-    pass
 
 
-class Clase2:
-    def mi_metodo(self, valor: str) -> None:
-        if Clase1.x:  # If True
-            self.valor = valor
+class Class2:
+    def my_method(self, valor: str) -> None:
+        if Class1.x:  # If True
+            self.value = valor
 
 
-mi_clase = Clase2()
-mi_clase.mi_metodo("Hola")
-print(mi_clase.valor)
+# my_class = Class2()
+# my_class.my_method("Hola")
+# print(my_class.value)
 
-Clase1.x = False  # Cambio en clase 1, de la cuál está fuertemente acoplada la clase 2
+# Class1.x = False  # Cambio en clase 1, de la cuál está fuertemente acoplada la clase 2
 
-# Otro proceso
-mi_clase.mi_metodo("Hola de nuevo")
-print(mi_clase.valor)  # Should be "hola de nuevo"
+# # Otro proceso
+# my_class.my_method("Hola de nuevo")
+# print(my_class.value)  # Debería de ser "hola de nuevo"
