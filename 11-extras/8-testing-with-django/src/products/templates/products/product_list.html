@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Products{% endblock %}
+
+{% block content %}
+  <div class="page-header">
+    <h1>Products</h1>
+    <a href="{% url 'products:create' %}" class="btn btn-primary">+ Add product</a>
+  </div>
+
+  <div class="product-grid">
+    {% for product in products %}
+      <div class="card product-item">
+        <span class="product-item__name">{{ product.name }}</span>
+        <span class="product-item__price">${{ product.price }}</span>
+      </div>
+    {% empty %}
+      <div class="card empty-state">No products available.</div>
+    {% endfor %}
+  </div>
+{% endblock %}
