@@ -1,0 +1,11 @@
+from django.urls import URLPattern, path
+
+from . import views
+
+app_name = "products"
+
+urlpatterns: list[URLPattern] = [
+    path("", views.product_list, name="list"),
+    path("<int:pk>/", views.product_detail, name="detail"),
+    path("create/", views.product_create, name="create"),
+]

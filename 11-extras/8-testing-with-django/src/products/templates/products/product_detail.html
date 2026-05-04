@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+  <div class="page-header">
+    <h1>{{ product.name }}</h1>
+    <a href="{% url 'products:list' %}" class="btn btn-secondary">← Back to list</a>
+  </div>
+
+  <div class="card detail-card">
+    <div class="detail-grid">
+      <div class="detail-field">
+        <span class="detail-field__label">Price</span>
+        <span class="detail-field__value">${{ product.price }}</span>
+      </div>
+      <div class="detail-field">
+        <span class="detail-field__label">Stock</span>
+        <span class="detail-field__value">{{ product.stock }} units</span>
+      </div>
+      <div class="detail-field">
+        <span class="detail-field__label">Status</span>
+        <span class="detail-field__value">
+          {% if product.is_available %}
+            <span class="badge badge-available">Available</span>
+          {% else %}
+            <span class="badge badge-unavailable">Unavailable</span>
+          {% endif %}
+        </span>
+      </div>
+      <div class="detail-field">
+        <span class="detail-field__label">Active</span>
+        <span class="detail-field__value">{{ product.is_active|yesno:"Yes,No" }}</span>
+      </div>
+    </div>
+  </div>
+{% endblock %}

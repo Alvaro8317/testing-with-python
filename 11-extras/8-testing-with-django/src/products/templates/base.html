@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Products{% endblock %}</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f1f5f9;
+      color: #1e293b;
+      min-height: 100vh;
+    }
+
+    nav {
+      background: #4f46e5;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      height: 56px;
+      box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+    }
+
+    nav a {
+      color: #e0e7ff;
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 0.375rem 0.75rem;
+      border-radius: 6px;
+      transition: background 0.15s;
+    }
+
+    nav a:hover { background: rgba(255, 255, 255, 0.15); color: #fff; }
+
+    nav .brand {
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.01em;
+      margin-right: auto;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 2.5rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.75rem;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.5rem 1.125rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .btn:active { transform: scale(0.97); }
+
+    .btn-primary {
+      background: #4f46e5;
+      color: #fff;
+    }
+
+    .btn-primary:hover { background: #4338ca; }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #475569;
+    }
+
+    .btn-secondary:hover { background: #cbd5e1; }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    /* ── Product list ── */
+    .product-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .product-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.125rem 1.5rem;
+    }
+
+    .product-item__name {
+      font-weight: 600;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+
+    .product-item__price {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: #4f46e5;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1.5rem;
+      color: #94a3b8;
+      font-size: 0.95rem;
+    }
+
+    /* ── Product detail ── */
+    .detail-card { padding: 2rem; }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin: 1.5rem 0 2rem;
+    }
+
+    .detail-field { display: flex; flex-direction: column; gap: 0.25rem; }
+
+    .detail-field__label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #64748b;
+    }
+
+    .detail-field__value {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #0f172a;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.625rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .badge-available { background: #dcfce7; color: #15803d; }
+    .badge-unavailable { background: #fee2e2; color: #b91c1c; }
+
+    /* ── Form ── */
+    .form-card { padding: 2rem; }
+
+    .form-group { margin-bottom: 1.25rem; }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 0.375rem;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+    .form-group input[type="email"],
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.5rem 0.875rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.9375rem;
+      color: #0f172a;
+      background: #f8fafc;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: #4f46e5;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+    }
+
+    /* Django renders <p> tags via form.as_p — restyle them */
+    .form-card p { margin-bottom: 1.25rem; }
+
+    .form-card p label {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 0.375rem;
+    }
+
+    .form-card p input,
+    .form-card p select {
+      width: 100%;
+      padding: 0.5rem 0.875rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.9375rem;
+      color: #0f172a;
+      background: #f8fafc;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .form-card p input:focus,
+    .form-card p select:focus {
+      border-color: #4f46e5;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+    }
+
+    .form-card p input[type="checkbox"] {
+      width: auto;
+      accent-color: #4f46e5;
+    }
+
+    .errorlist {
+      list-style: none;
+      color: #b91c1c;
+      font-size: 0.8125rem;
+      margin-top: 0.25rem;
+    }
+
+    .form-actions { margin-top: 1.75rem; display: flex; gap: 0.75rem; }
+  </style>
+</head>
+<body>
+  <nav>
+    <span class="brand">Django Testing</span>
+    <a href="{% url 'products:list' %}">Products</a>
+    <a href="{% url 'products:create' %}">New product</a>
+  </nav>
+  <div class="container">
+    {% block content %}{% endblock %}
+  </div>
+</body>
+</html>
