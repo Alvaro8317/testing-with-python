@@ -1,5 +1,6 @@
+import hypothesis
+from hypothesis import strategies as st
 from src import text_utils
-
 
 # ===========================================================================
 # TEXTO — slugify
@@ -11,9 +12,22 @@ from src import text_utils
 # saltos de línea, espacios unicode y combinaciones que jamás escribirías.
 
 
+@hypothesis.given(st.text())
+def test_should_validate_slugify_does_not_contain_spaces(text_to_test: str) -> None:
+    result = text_utils.slugify(text=text_to_test)
+    assert " " not in result
+
+
 # PROPIEDAD: el resultado siempre está en minúsculas, para cualquier texto de entrada.
 # ¿Por qué no un unit test? Podrías olvidar probar texto que ya venía en mayúsculas
 # mezcladas con números o símbolos. Hypothesis lo encuentra solo.
+
+
+@hypothesis.given(st.text())
+def test_should_validate_slugify_always_is_lowercase(text_to_test: str) -> None:
+    result = text_utils.slugify(text=text_to_test)
+    result_lowercase = result.lower()
+    assert result_lowercase == result
 
 
 # PROPIEDAD: aplicar slugify dos veces produce el mismo resultado que aplicarlo una vez
@@ -54,4 +68,3 @@ from src import text_utils
 
 # PROPIEDAD: el word_count del resultado siempre es igual al word_count
 # del texto original. Normalizar espacios no debe cambiar la cantidad de palabras.
-

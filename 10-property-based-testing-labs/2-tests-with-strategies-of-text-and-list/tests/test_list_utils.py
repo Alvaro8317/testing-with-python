@@ -1,5 +1,7 @@
+import hypothesis
+import pytest
+from hypothesis import strategies as st
 from src import list_utils
-
 
 # ===========================================================================
 # LISTAS — remove_duplicates
@@ -8,6 +10,13 @@ from src import list_utils
 # PROPIEDAD: el resultado nunca tiene más elementos que la lista original.
 # ¿Por qué no un unit test? Tu ejemplo podría no tener duplicados
 # y el test pasaría sin probar nada real.
+
+
+@pytest.mark.list_utils
+@hypothesis.given(st.lists(st.integers()))
+def test_remove_duplicate_length_should_not_be_more_than_original(list_to_text: list[int]) -> None:
+    result = list_utils.remove_duplicates(items=list_to_text)
+    assert len(result) <= len(list_to_text)
 
 
 # PROPIEDAD: cada elemento de la lista original aparece al menos una vez
